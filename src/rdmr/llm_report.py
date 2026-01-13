@@ -37,11 +37,22 @@ def _format_variant_summary(df: pd.DataFrame) -> str:
 def _format_expression_summary(df: Optional[pd.DataFrame]) -> str:
     if df is None or df.empty:
         return "No expression results available."
+
+    # Prefer 'log2FC' if present, otherwise fall back to DESeq2's 'log2FoldChange'
+    log2fc_col = None
+    if "log2FC" in df.columns:
+        log2fc_col = "log2FC"
+    elif "log2FoldChange" in df.columns:
+        log2fc_col = "log2FoldChange"
+
     lines = []
     for _, row in df.iterrows():
-        lines.append(
-            f"- {row['gene']}: baseMean={row['baseMean']:.1f}, log2FC={row['log2FC']:.2f}"
-        )
+        if log2fc_col is not None:
+            lines.append(
+                f"- {row['gene']}: baseMean={row['baseMean']:.1f}, {log2fc_col}={row[log2fc_col]:.2f}"
+            )
+        else:
+            lines.append(f"- {row['gene']}: baseMean={row['baseMean']:.1f}")
     return "\n".join(lines)
 
 
@@ -129,13 +140,13 @@ def generate_report(
 
 {variants_summary}
 
-## Expression Summary (placeholder)
+## Expression Summary (DESeq2-based, toy)
 
 {expression_summary}
 
 ## Notes
 
-- This report was generated without an LLM (no OPENAI_API_KEY configured).
+- This report was generated without an LLM (no OPENAI_API_KEY configured), or the LLM call failed.
 - All results are synthetic and for demonstration only.
 """
 
