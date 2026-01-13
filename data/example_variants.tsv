@@ -1,0 +1,9 @@
+chrom	pos	ref	alt	gene	consequence	af
+1	123456	A	G	BRCA1	missense_variant	0.0005
+1	234567	G	A	BRCA1	stop_gained	0.0001
+2	345678	C	T	TP53	missense_variant	0.02
+2	456789	G	GA	TP53	frameshift_variant	0.00001
+3	567890	T	C	LMNA	synonymous_variant	0.10
+3	678901	C	T	LMNA	missense_variant	0.005
+4	789012	A	G	GENE_X	intron_variant	0.0002
+
